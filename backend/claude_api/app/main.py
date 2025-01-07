@@ -136,12 +136,12 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_session)):
             except Exception as e:
                 context += f"\nFile: {file.name}\nContent: [Error reading file: {str(e)}]\n"
     
-    # Create or get chat
-    chat_title = request.messages[0].content[:50] + "..." if request.messages else "New Chat"
+    # Create chat with date-based title
+    chat_title = datetime.now().strftime("%Y-%m-%d %H:%M")
     chat = Chat(
         project_id=request.project_id,
         title=chat_title,
-        preview=request.messages[0].content if request.messages else ""
+        preview=request.messages[0].content if request.messages else "New conversation"
     )
     db.add(chat)
     await db.commit()

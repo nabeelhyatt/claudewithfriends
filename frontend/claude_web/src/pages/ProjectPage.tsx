@@ -73,8 +73,10 @@ const ProjectPage: React.FC = () => {
             <Button
               variant="outline"
               onClick={() => {
-                navigator.clipboard.writeText(window.location.href)
-                toast({ title: "Link Copied", description: "Shared project URL copied to clipboard." })
+                // Ensure we only copy the project base URL without any chat routes
+                const baseUrl = window.location.origin + `/projects/${projectId}`
+                navigator.clipboard.writeText(baseUrl)
+                toast({ title: "Link Copied", description: "Project URL copied to clipboard. Share this link to collaborate!" })
               }}
             >
               + Collaborate
@@ -88,26 +90,36 @@ const ProjectPage: React.FC = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2">
-            <Routes>
-              <Route path="/" element={<ChatHistory projectId={parseInt(projectId!)} />} />
-              <Route path="/chats/:chatId" element={<ChatContainer projectId={parseInt(projectId!)} files={project.files} />} />
-            </Routes>
-          </div>
-          
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Project Knowledge</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <FileUpload projectId={parseInt(projectId!)} onFileUploaded={fetchProject} />
-                  <FileList files={project.files} />
-                </div>
-              </CardContent>
-            </Card>
+        <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2">
+              <Routes>
+                <Route path="/chats/:chatId" element={<ChatContainer projectId={parseInt(projectId!)} files={project.files} />} />
+              </Routes>
+            </div>
+            
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Project Knowledge</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <FileUpload projectId={parseInt(projectId!)} onFileUploaded={fetchProject} />
+                    <FileList files={project.files} />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Chat History</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ChatHistory projectId={parseInt(projectId!)} />
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
