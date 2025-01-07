@@ -41,8 +41,11 @@ export const RootLayout: React.FC<RootLayoutProps> = () => {
   }
 
   useEffect(() => {
-    fetchProjects()
-  }, [])
+    // Fetch projects on mount and when returning to dashboard
+    if (location.pathname === '/' || !projects.length) {
+      fetchProjects()
+    }
+  }, [location.pathname])
 
   useEffect(() => {
     const projectMatch = location.pathname.match(/\/projects\/(\d+)/)

@@ -1,7 +1,7 @@
 import type { FC } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { FileText, Image as ImageIcon } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
+import { format } from "date-fns"
 import { formatBytes } from "../lib/utils"
 
 interface File {
@@ -14,6 +14,10 @@ interface File {
 
 interface FileListProps {
   files: File[]
+}
+
+const truncateName = (name: string): string => {
+  return name.length > 14 ? name.slice(0, 14) + "..." : name
 }
 
 export const FileList: FC<FileListProps> = ({ files }) => {
@@ -36,13 +40,13 @@ export const FileList: FC<FileListProps> = ({ files }) => {
               ) : (
                 <FileText className="mr-2 h-4 w-4" />
               )}
-              {file.name}
+              {truncateName(file.name)}
             </CardTitle>
           </CardHeader>
           <CardContent className="py-2">
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>{formatBytes(file.size)}</span>
-              <span>{formatDistanceToNow(new Date(file.uploaded_at), { addSuffix: true })}</span>
+              <span>{format(new Date(file.uploaded_at), "yyyy-MM-dd HH:mm")}</span>
             </div>
           </CardContent>
         </Card>
