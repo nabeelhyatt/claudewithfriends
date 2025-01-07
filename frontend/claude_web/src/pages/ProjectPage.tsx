@@ -73,8 +73,10 @@ const ProjectPage: React.FC = () => {
             <Button
               variant="outline"
               onClick={() => {
-                navigator.clipboard.writeText(window.location.href)
-                toast({ title: "Link Copied", description: "Shared project URL copied to clipboard." })
+                // Ensure we only copy the project base URL without any chat routes
+                const baseUrl = window.location.origin + `/projects/${projectId}`
+                navigator.clipboard.writeText(baseUrl)
+                toast({ title: "Link Copied", description: "Project URL copied to clipboard. Share this link to collaborate!" })
               }}
             >
               + Collaborate
