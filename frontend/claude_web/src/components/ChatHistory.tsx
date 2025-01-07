@@ -4,7 +4,7 @@ import { Card, CardContent } from "./ui/card"
 import { ScrollArea } from "./ui/scroll-area"
 import { Search } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import { format } from "date-fns"
+import { formatDistanceToNow } from "date-fns"
 
 interface Message {
   id: number
@@ -88,7 +88,7 @@ export const ChatHistory: FC<ChatHistoryProps> = ({ projectId }) => {
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-medium">{chat.title}</h3>
                   <span className="text-xs text-muted-foreground">
-                    {format(new Date(chat.updated_at), "yyyy-MM-dd HH:mm")}
+                    {formatDistanceToNow(new Date(chat.updated_at), { addSuffix: true })}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-2">
